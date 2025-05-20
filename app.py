@@ -8,7 +8,7 @@ import plotly.express as px
 clf = joblib.load('risk_classifier.joblib')
 scaler = joblib.load('feature_scaler.joblib')
 feature_names = joblib.load('feature_names.joblib')
-reference_df = pd.read_csv("csv/combined_ehr_cost_dataset.csv")  # Your summary dataset
+reference_df = pd.read_csv("combined_ehr_cost_dataset.csv")  # Your summary dataset
 
 st.set_page_config(page_title="Patient Risk Prediction App", layout="wide")
 st.title('🏥 Patient Risk Prediction App')
