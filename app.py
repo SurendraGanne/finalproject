@@ -8,7 +8,11 @@ import plotly.express as px
 clf = joblib.load('risk_classifier.joblib')
 scaler = joblib.load('feature_scaler.joblib')
 feature_names = joblib.load('feature_names.joblib')
+<<<<<<< HEAD
+reference_df = pd.read_csv("output/csv/combined_ehr_cost_dataset.csv")  # Your summary dataset
+=======
 reference_df = pd.read_csv("combined_ehr_cost_dataset.csv")  # Your summary dataset
+>>>>>>> 171ce994f3dcff5543d94ce285cd6b553346dc19
 
 st.set_page_config(page_title="Patient Risk Prediction App", layout="wide")
 st.title('🏥 Patient Risk Prediction App')
@@ -196,12 +200,34 @@ if st.button('Predict Risk Level'):
     st.plotly_chart(fig2, use_container_width=True)
 
     # ----- 7. Input Data -----
-    st.markdown("### Input Data Used for Prediction")
-    st.dataframe(input_df)
+    st.markdown("### Summary of Input Data")
+    st.write("A summary of the patient’s input data along with helpful interpretations:")
+
+    interpreted_data = []
+    for field in fields:
+        val = feature_dict[field]
+        stats = field_stats[field]
+        if val < stats['q1']:
+            interpretation = "Below normal range"
+        elif val > stats['q3']:
+            interpretation = "Above normal range"
+        else:
+            interpretation = "Within typical range"
+
+        interpreted_data.append({
+            "Variable": field.replace("_", " "),
+            "Entered Value": val,
+            "Typical Range": f"{stats['q1']} - {stats['q3']}",
+            "Interpretation": interpretation
+        })
+
+    interpreted_df = pd.DataFrame(interpreted_data)
+    st.dataframe(interpreted_df)
+
 
     # ----- 8. Variable Ranges Table -----
     stats_df = pd.DataFrame(field_stats).T
-    with st.expander("Show input variable ranges from data"):
+    with st.expander(" Input variable ranges from data"):
         st.dataframe(stats_df)
 
     # ----- 9. (Optional) Download report -----
